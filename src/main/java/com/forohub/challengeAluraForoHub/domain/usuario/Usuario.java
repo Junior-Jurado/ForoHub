@@ -29,4 +29,24 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "perfil_id")
     )
     private Set<Perfil> perfiles;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Set<Perfil> getPerfiles() {
+        return perfiles;
+    }
 }

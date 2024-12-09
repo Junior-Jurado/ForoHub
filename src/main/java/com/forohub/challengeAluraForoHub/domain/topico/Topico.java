@@ -35,7 +35,7 @@ public class Topico {
     @ManyToOne
     @JoinColumn(name = "curso", nullable = false)
     private Curso curso;
-    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Respuesta> respuestas;
 
     public Topico() {
@@ -79,14 +79,13 @@ public class Topico {
     }
 
     public List<Respuesta> getRespuestas() {
-        if (respuestas == null) {
-            return new ArrayList<>();
-        }
         return respuestas;
     }
 
-    public void actualizarTopico(@Valid DatosActualizarTopico datos) {
+    public void actualizarTopico(@Valid DatosActualizarTopico datos, Usuario autor, Curso curso) {
+        this.titulo = datos.titulo();
         this.mensaje = datos.mensaje();
-        this.status = Status.fromValue(datos.status());
+        this.autor = autor;
+        this.curso = curso;
     }
 }

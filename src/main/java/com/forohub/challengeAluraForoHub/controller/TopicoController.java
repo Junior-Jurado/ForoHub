@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/topicos")
 public class TopicoController {
 
     @Autowired
-    private CreacionDeTopicos crearTopico;
+    private ManejoDeTopicos manejoTopico;
 
     @Autowired
     private TopicoRepository topicoRepository;
@@ -29,7 +28,7 @@ public class TopicoController {
     public ResponseEntity<DatosRespuestaTopico> registrarTopico(@RequestBody @Valid DatosRegistroTopico datos,
                                                                 UriComponentsBuilder uriComponentsBuilder) {
 
-        DatosRespuestaTopico respuestaTopico = crearTopico.registrar(datos);
+        DatosRespuestaTopico respuestaTopico = manejoTopico.registrar(datos);
         URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(respuestaTopico.id()).toUri();
         return ResponseEntity.created(url).body(respuestaTopico);
     }
@@ -39,12 +38,12 @@ public class TopicoController {
         return ResponseEntity.ok(topicoRepository.findAll(paginacion).map(DatosRespuestaTopico::new));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<DatosRespuestaActualizacionTopico> actualizarTopico(@RequestBody @Valid DatosActualizarTopico datos) {
-        Topico topico = topicoRepository.getReferenceById(datos.id());
-        topico.actualizarTopico(datos);
-        return ResponseEntity.ok(new DatosRespuestaActualizacionTopico(topico.getId(), topico.getTitulo(), topico.getMensaje(), topico.getStatus()));
+    public ResponseEntity<DatosRespuestaActualizacionTopico> actualizarTopico(@PathVariable Long id,
+                                                                              @RequestBody @Valid DatosActualizarTopico datos) {
+        var datosRespuesta = manejoTopico.actualizar(id, datos);
+        return ResponseEntity.ok(new DatosRespuestaActualizacionTopico(datosRespuesta));
     }
 
     @DeleteMapping("/{id}")
@@ -52,5 +51,12 @@ public class TopicoController {
     public ResponseEntity eliminarTopico(@PathVariable Long id) {
         topicoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detallarTopico(@PathVariable Long id) {
+        var datosRespuesta = manejoTopico.detalles(id);
+
+        return ResponseEntity.ok(datosRespuesta);
     }
 }

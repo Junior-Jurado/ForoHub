@@ -24,4 +24,20 @@ public class Curso {
     private Categoria categoria;
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Topico> topicos;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public List<Topico> getTopicos() {
+        return topicos;
+    }
 }
