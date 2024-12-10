@@ -1,4 +1,4 @@
-package infra.errores;
+package com.forohub.challengeAluraForoHub.infra.errores;
 import com.forohub.challengeAluraForoHub.domain.ValidacionException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;

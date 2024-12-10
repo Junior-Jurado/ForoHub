@@ -23,4 +23,8 @@ public class Perfil {
 
     @ManyToMany(mappedBy = "perfiles")
     private Set<Usuario> usuarios;
+
+    public String getAuthority() {
+        return nombre;
+    }
 }
